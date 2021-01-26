@@ -1,8 +1,9 @@
 results/
 misc/
+maxflow/*.cpp
+maxflow/__pycache__
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
 
@@ -17,7 +18,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
