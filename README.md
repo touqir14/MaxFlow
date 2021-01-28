@@ -1,6 +1,6 @@
 # MaxFlow
 A high performance Python library for computing the maximum flow in Graphs! This is based on the work of Jan Groschaft.
-It currently contains the follow algorithms:
+It currently contains the following algorithms:
 * Edmonds-Karp's Algorithm : ```maxflow.edmonds_karp(A, source, sink)```
 * Ahuja-Orlin's Algorithm : ```maxflow.ahuja_orlin(A, source, sink)```
 * Dinic's Algorithm : ```maxflow.dinic(A, source, sink)```
