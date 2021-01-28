@@ -37,7 +37,7 @@ namespace parallel_push_relabel
             std::atomic_flag discovered = ATOMIC_FLAG_INIT;
         };
 
-        vector<vector<cached_edge<T, U>>> _residual_network;
+        vector<vector<cached_edge<T, U>>> & _residual_network;
         std::unique_ptr<vertex[]> _vertices;
         std::unique_ptr<T[]> _active { };
         data_structures::thread_local_buffer_pool<T> _pool;
@@ -45,10 +45,10 @@ namespace parallel_push_relabel
         std::size_t _relabel_progress;
         const T _thread_count;
     public:
-        max_flow_instance ( vector<vector<cached_edge<T, U>>> graph, T source, T sink,
+        max_flow_instance ( vector<vector<cached_edge<T, U>>> & graph, T source, T sink,
                             std::size_t thread_count = static_cast<size_t>(omp_get_max_threads ()) )
                 :
-                _residual_network ( std::move ( graph ) ),
+                _residual_network ( graph ),
                 _vertices ( std::make_unique<vertex[]> ( _residual_network . size () ) ),
                 _active ( std::make_unique<T[]> ( _residual_network . size () ) ),
                 _pool ( data_structures::thread_local_buffer_pool<T> ( thread_count, _residual_network . size () ) ),

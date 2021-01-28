@@ -36,7 +36,7 @@ namespace ahuja_orlin
 
     private:
         using pair = std::pair<T, T>;
-        vector<vector<cached_edge<T, U>>> _residual_network;
+        vector<vector<cached_edge<T, U>>> & _residual_network;
         std::unique_ptr<label_info[]> _labels;
         std::unique_ptr<vertex[]> _vertices;
         data_structures::queue<pair> _distance_q;
@@ -47,9 +47,9 @@ namespace ahuja_orlin
         //statistics
         uint64_t _push_cnt { 0 }, _relabel_cnt { 0 }, _gap_cnt { 0 }, _gap_nodes { 0 }, _global_relabel_cnt { 0 };
     public:
-        max_flow_instance ( vector<vector<cached_edge<T, U>>> graph, T source, T sink, size_t nthread=1 )
+        max_flow_instance ( vector<vector<cached_edge<T, U>>> & graph, T source, T sink, size_t nthread=1 )
                 :
-                _residual_network ( std::move ( graph ) ),
+                _residual_network ( graph ),
                 _labels ( std::make_unique<label_info[]> ( _residual_network . size () + 1 ) ),
                 _vertices ( std::make_unique<vertex[]> ( _residual_network . size () ) ),
                 _distance_q ( data_structures::queue<pair> { _residual_network . size () } ),

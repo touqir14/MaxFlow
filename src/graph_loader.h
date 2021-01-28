@@ -17,7 +17,7 @@
 
 
 template <typename T, typename U, template <typename, typename> typename EDGE = basic_edge>
-void _load_graph(std::size_t num_edges, std::vector<T> &outgoing_edge_cnt, std::vector<EDGE<T, U>> &edges, std::vector<std::vector<EDGE<T, U>>> &graph)
+void _init_graph(std::size_t num_edges, std::vector<T> &outgoing_edge_cnt, std::vector<EDGE<T, U>> &edges, std::vector<std::vector<EDGE<T, U>>> &graph)
 {
     //alloc graph
     for (std::size_t i = 0; i < graph.size(); ++i) 
@@ -62,7 +62,7 @@ void set_reverse_edge_cap(std::vector<std::vector<cached_edge<T, U>>> & graph)
 
 
 template<typename T, typename U, template <typename, typename> typename EDGE>
-auto load_graph_dense(void* A_ptr, size_t n) {
+auto _load_graph_dense(void* A_ptr, size_t n) {
     
     const U* capacity_array = (U*) A_ptr;
     std::vector<EDGE<T,U>> edges;
@@ -96,18 +96,18 @@ auto load_graph_dense(void* A_ptr, size_t n) {
     }
 
     edges.resize(num_edges);
-    std::vector<std::vector<EDGE<T, U>>> graph(n);
-    _load_graph<T, U, EDGE> (num_edges, outgoing_edge_cnt, edges, graph);
+    auto graph_ptr = std::make_shared<std::vector<std::vector<EDGE<T, U>>>> (n);
+    _init_graph<T, U, EDGE> (num_edges, outgoing_edge_cnt, edges, *graph_ptr);
     if constexpr(std::is_same_v<EDGE<T,U>, cached_edge<T,U>>) {
-        set_reverse_edge_cap<T, U>(graph);
+        set_reverse_edge_cap<T, U>(*graph_ptr);
     }
-    return graph;
+    return graph_ptr;
 }
 
 
 
 template<typename T, typename U, template <typename, typename> typename EDGE>
-auto load_graph_sparse(void* A_ptr, void* row_ptr, void* col_ptr, size_t n, size_t m) {
+auto _load_graph_sparse(void* A_ptr, void* row_ptr, void* col_ptr, size_t n, size_t m) {
     
     const U* capacity_array = (U*) A_ptr;
     const T* rows = (T*) row_ptr;
@@ -146,12 +146,12 @@ auto load_graph_sparse(void* A_ptr, void* row_ptr, void* col_ptr, size_t n, size
     }
 
     edges.shrink_to_fit();
-    std::vector<std::vector<EDGE<T, U>>> graph(n);
-    _load_graph<T, U, EDGE> (num_edges, outgoing_edge_cnt, edges, graph);
+    auto graph_ptr = std::make_shared<std::vector<std::vector<EDGE<T, U>>>> (n);
+    _init_graph<T, U, EDGE> (num_edges, outgoing_edge_cnt, edges, *graph_ptr);
     if constexpr(std::is_same_v<EDGE<T,U>, cached_edge<T,U>>) {
-        set_reverse_edge_cap<T, U>(graph);
+        set_reverse_edge_cap<T, U>(*graph_ptr);
     }
-    return graph;
+    return graph_ptr;
 }
 
     

@@ -7,16 +7,14 @@
 #include <memory>
 #include "../../data_structures/queue.h"
 #include "../../common_types.h"
-// #include <vector>
 #include <iostream>
 
 namespace edmonds_karp
 {
     template <template <class> typename vector, typename T, typename U>
-    // template <typename T, typename U>
     class max_flow_instance
     {
-        vector<vector<basic_edge<T, U>>> _residual_network;
+        vector<vector<basic_edge<T, U>>> & _residual_network;
         std::unique_ptr<basic_edge<T, U> * []> _parents;
         std::unique_ptr<bool[]> _visited;
         data_structures::queue<T> _q;
@@ -24,8 +22,8 @@ namespace edmonds_karp
 
     public:
         bool is_set = false;
-        max_flow_instance ( vector<vector<basic_edge<T, U>>> graph, T source, T sink, size_t nthreads=1) :
-                _residual_network ( std::move ( graph ) ),
+        max_flow_instance ( vector<vector<basic_edge<T, U>>> & graph, T source, T sink, size_t nthreads=1) :
+                _residual_network ( graph ),
                 _parents ( std::make_unique<basic_edge<T, U> * []> ( _residual_network . size () ) ),
                 _visited ( std::make_unique<bool[]> ( _residual_network . size () ) ),
                 _q ( data_structures::queue<T> ( _residual_network . size () ) ),
@@ -40,11 +38,6 @@ namespace edmonds_karp
             while ( auto flow = find_augmenting_path () )
                 max_flow += flow;
             return max_flow;
-        }
-
-        auto steal_network ( )
-        {
-            return std::move ( _residual_network );
         }
 
     private:

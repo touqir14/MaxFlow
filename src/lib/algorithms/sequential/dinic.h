@@ -14,24 +14,19 @@ namespace dinic
     template <template <class> typename vector, typename T, typename U>
     class max_flow_instance
     {
-        vector<vector<basic_edge<T, U>>> _residual_network;
+        vector<vector<basic_edge<T, U>>> & _residual_network;
         std::unique_ptr<T[]> _levels, _progress;
         data_structures::queue<T> _q;
         T _source, _sink;
     public:
-        max_flow_instance ( vector<vector<basic_edge<T, U>>> graph, T source, T sink, size_t nthread=1 ) :
-                _residual_network ( std::move ( graph ) ),
+        max_flow_instance (vector<vector<basic_edge<T, U>>> & graph, T source, T sink, size_t nthread=1 ) :
+                _residual_network( graph ),
                 _levels ( std::make_unique<T[]> ( _residual_network . size () ) ),
                 _progress ( std::make_unique<T[]> ( _residual_network . size () ) ),
                 _q ( data_structures::queue<T> ( _residual_network . size () ) ),
                 _source ( source ), _sink ( sink )
         {
 
-        }
-
-        max_flow_instance () 
-        {
-            
         }
 
         U find_max_flow ( )
@@ -46,10 +41,6 @@ namespace dinic
             return max_flow;
         }
 
-        auto steal_network ( )
-        {
-            return std::move ( _residual_network );
-        }
 
     private:
         bool build_level_graph ( )
