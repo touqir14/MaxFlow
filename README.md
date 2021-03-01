@@ -54,7 +54,7 @@ All the algorithms except maxflow's edmond-karp's algorithm significantly outper
 |parallel_push_relabel_segment | 0.0191s | 0.0572s | 0.0981s | 0.1319s |
 
 ### Benchmarking only solvers
-Below, it is shown that the solver itself consumes a small fraction of the total time, much of which is attributed to the internal graph loader of MaxFlow. For reference, we include Google's OR-Tools maximum flow computing algorithm. In all of the benchmarks below, the graph loading time is discarded. From the benchmarks below, ```push_relabel_highest``` is generally the fastest. It can be seen that ```Google's OR-Tools maximum flow``` is significantly slower than all the algorithms except ```edmonds_karp```.
+Below, it is shown that the solver itself consumes a small fraction of the total time, much of which is attributed to the internal graph loader of MaxFlow. For reference implementation, we include Google's OR-Tools maximum flow computing algorithm. In all of the benchmarks below, the graph loading time is discarded. From the benchmarks below, ```push_relabel_highest``` is generally the fastest. It can be seen that ```Google's OR-Tools maximum flow``` is significantly slower than all the algorithms except ```edmonds_karp```.
 
 |Algorithm | Density: 0.1 | Density: 0.3 | Density: 0.5 | Density: 0.9 |
 |----------|--------------|--------------|--------------|--------------|
